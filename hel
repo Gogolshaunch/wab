@@ -1,0 +1,33 @@
+from flask import Flask
+import sqlite3
+
+year = int(input('Введите год рождения:'))
+
+
+def index():
+    global data
+    global year
+    conn = sqlite3.connect("Artistc.sqlite")
+    cursor = conn.cursor()
+    cursor.execute('''SELECT Name FROM Artists WHERE Birth_Year ==(?)''', [year])
+    data = cursor.fetchall()
+
+
+def main():
+    if len(data) == 0:
+        return 'Нет художника с таким годом рождения'
+    elif len(data) == 1:
+        return 'Найден один хужожник'
+        return data
+    else:
+        return 'Есть несколько личностей'
+        return data
+
+
+app = Flask(__name__)
+
+app.add_url_rule('/', 'main', main)
+
+
+if __name__ == "__main__":
+    app.run()
